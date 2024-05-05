@@ -3,6 +3,7 @@
 ```
 pip install tensorflow
 pip install Flask-Cors
+pip install flask
 ```
 
 ```
