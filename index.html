@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Upload Image</title>
+    <style>
+      #upload-box {
+        background-color: purple;
+        width: 300px;
+        padding: 20px;
+        color: white;
+        text-align: center;
+      }
+      #upload-button {
+        background-color: white;
+        color: purple;
+        border: none;
+        padding: 10px 20px;
+        text-transform: uppercase;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="upload-box">
+      <h2>Drag and drop your image here</h2>
+      <p>or</p>
+      <form id="upload-form" enctype="multipart/form-data">
+        <input
+          type="file"
+          id="image-upload"
+          name="image"
+          accept="image/*"
+          style="display: none"
+        />
+        <label for="image-upload" id="upload-button">Browse</label>
+      </form>
+    </div>
+
+    <script>
+      document
+        .getElementById("image-upload")
+        .addEventListener("change", function () {
+          var file = this.files[0];
+          var formData = new FormData();
+          formData.append("image", file);
+
+          fetch("http://127.0.0.1:5000/predict", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              // Update the UI with the predicted class name
+              document.getElementById("upload-box").innerHTML = `
+                    <h2>Uploaded image</h2>
+                    <img src="${URL.createObjectURL(
+                      file
+                    )}" style="max-width: 100%;">
+                    <p>Predicted class: ${data.class_name}</p>
+                    <p>Confidence: ${data.score}</p>
+                `;
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
+    </script>
+  </body>
+</html>
