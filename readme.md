@@ -1,7 +1,9 @@
 ## Final year project
 
+```
 pip install tensorflow
 pip install Flask-Cors
+```
 
 ```
 fetch("http://127.0.0.1:5000/predict", {
